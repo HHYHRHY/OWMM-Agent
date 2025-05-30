@@ -113,7 +113,6 @@ Robot's Task: Move {self.obj_item}from the {self.target_rec} to the {self.goal_r
             return question_prompt_align_with_ovmm
         else:
             return None
-        #DO NOT FORGET CHANGE THE ANNOTATION
     def first_search_image_path_answer_old(self,k_frame):
         answer = {
             "reasoning":f"My history indicates that I am just beginning my task.Based on my task,I must first navigate to {self.target_rec} where the {self.obj_item} is located. In my current view, I can not see {self.target_rec}, so I need to search scene frames. In  Image-{k_frame}, I can see {self.target_rec}, so the Image-{k_frame} is what I should choose.",
@@ -122,19 +121,6 @@ Robot's Task: Move {self.obj_item}from the {self.target_rec} to the {self.goal_r
             "summarization":f"The task has started and I am navigating to find the {self.target_rec} where the {self.obj_item} is located."
             }
         self.summary = f"The task has started and I am navigating to find the {self.target_rec} where the {self.obj_item} is located."
-        return answer
-    def first_search_image_path_answer_generate(self,k_frame):#THIS IS FOR GPT anno image
-        answer = {
-            "reasoning":f"My history indicates that I am just beginning my task.Based on my task,I must first navigate to {self.target_rec} where the {self.obj_item} is located. In my current view, I can not see {self.target_rec}, so I need to search scene frames.",
-            "anno_prompt_for_gpt":f"There are eight images from scene graph images.The robot's current task is to navigate to the {self.target_rec}.As the robot can not find the target from its current view,it need to navigate to one of the images which contain its target.For ground truth,the robot need to navigate to the Image-{k_frame} as there is only Image-{k_frame} contain the {self.target_rec}.Now you are the robot.Your output need to first consider your own tasks,describe each image in DETAIL and deduce which image to select based on the ground truth I provide,but pretend that you do not know the ground truth.Please ensure your output is in the first-person format and does not contain line breaks.",
-            "action":"search_scene_frame",
-            "action_information":k_frame,
-            "summarization":f"The task has started and I am navigating to find the {self.target_rec} where the {self.obj_item} is located."
-            }
-        self.summary = f"The task has started and I am navigating to find the {self.target_rec} where the {self.obj_item} is located."
-        return answer
-    def first_search_image_path_answer(self,k_frame):  #DO NOT FORGET CHANGE THE ANNOTATION
-        answer = k_frame
         return answer
     
     def first_nav_answer(self,target_rec_info,nav_point_info,action_info):
@@ -154,19 +140,6 @@ Robot's Task: Move {self.obj_item}from the {self.target_rec} to the {self.goal_r
             "summarization":f"The task has started and I am getting closer to {self.target_rec} where the {self.obj_item} is located."
             }
         self.summary = f"The task has started and I am getting closer to {self.target_rec} where the {self.obj_item} is located."
-        return answer
-    def first_nav_answer_add_object_anno(self,target_rec_info,nav_point_info,action_info,object_info = None):
-        if object_info:
-            object_prompt = f"Additionally, I also see the {self.obj_item} is in the {object_info} of the image. Since there is not green point on the {self.obj_item}, I should continue navigating closer to it. Considering the {self.obj_item} is in the {object_info} of the image,and the navigable area of the ground,I can determine that the ground in the {nav_point_info} of the image is the perfect choice to navigate to."
-        else:
-            object_prompt = f"However, I didn't find the {self.obj_item} in the image. I need to decide my next navigation direction based on the {self.target_rec}'s position in the image to increase my chances of seeing the {self.obj_item}. Since the {self.target_rec} is mainly on the {target_rec_info} of the image, I should attach to the {target_rec_info} area. Considering the navigable regions, I ultimately chose the the ground in the {nav_point_info} of the image as my next navigation target."
-        answer = {
-            "reasoning":f"Based on my task,I need to navigate to {self.target_rec} where the {self.obj_item} is located, pick the {self.obj_item} up,navigate to the {self.goal_rec} and place the {self.obj_item}.My history indicates that I am searching for {self.target_rec} to pick the {self.obj_item}, so I must continue to navigate to {self.target_rec} where the {self.obj_item} is located. In my current view, I can see that {self.target_rec} is located on the {target_rec_info} of the image.{object_prompt}",
-            "action":"nav_to_point",
-            "action_information":f"{action_info}",
-            "summarization":f"The task has started and I am getting closer to {self.target_rec} where the {self.obj_item} is located."
-            }
-        self.summary = f"The task has started and I am getting closer to {self.obj_item} located on the {self.target_rec}."
         return answer
     def pick_answer(self,target_rec_info,obj_info,action_info,object_info = None):
         answer = {
@@ -193,20 +166,6 @@ Robot's Task: Move {self.obj_item}from the {self.target_rec} to the {self.goal_r
             }
         self.summary = f"The task has started and I have navigated to {self.target_rec} and picked up the {self.obj_item}, I am navigating to find the {self.goal_rec} where I should place {self.obj_item}."
         return answer
-    def second_search_image_path_answer(self,k_frame):  #DO NOT FORGET CHANGE THE ANNOTATION,THIS IS TEST ID ONLY
-        answer = k_frame
-        return answer
-    def second_search_image_path_answer_generate(self,k_frame): #THIS IS FOR GPT anno image
-        answer = {
-            "reasoning":f"My history indicates that I have navigated to {self.target_rec} and picked up the {self.obj_item}.Based on my task,now I need to navigate to the {self.goal_rec}.In my current view, I cannot see {self.goal_rec}, so I need to search scene frames.",
-            "anno_prompt_for_gpt":f"There are eight images from scene graph images.The robot's current task is to navigate to the {self.goal_rec}.As the robot can not find the target from its current view,it need to navigate to one of the images which contain its target.For ground truth,the robot need to navigate to the Image-{k_frame} as there is only Image-{k_frame} contain the {self.goal_rec}.Now you are the robot.Your output need to first consider your own tasks,describe each image in DETAIL and deduce which image to select based on the ground truth I provide,but pretend that you do not know the ground truth.Please ensure your output is in the first-person format and does not contain line breaks.",
-            "action":"search_scene_frame",
-            "action_information":k_frame,
-            "summarization":f"The task has started and I have navigated to {self.target_rec} and picked up the {self.obj_item}.I am navigating to find the {self.goal_rec} where I should place {self.obj_item}."
-            }
-        self.summary = f"The task has started and I have navigated to {self.target_rec} and picked up the {self.obj_item}, I am navigating to find the {self.goal_rec} where I should place {self.obj_item}."
-        return answer
-
     def second_nav_answer(self,goal_rec_info,nav_point_info,action_info):
         answer = {
             "reasoning":f"Based on my task,I need to navigate to {self.target_rec} where the {self.obj_item} is located, pick the {self.obj_item} up,navigate to the {self.goal_rec} and place the {self.obj_item}.My history indicates that I have picked up {self.obj_item} and am searching for {self.goal_rec}.I must continue to navigate to {self.goal_rec} and place {self.obj_item}. In my current view, I can see that {self.goal_rec} is located on the {goal_rec_info} of the image.As there are not enough green points on the {self.goal_rec},I need to get closer to it.I can determine that the ground in the {nav_point_info} of the image is a navigable area.",

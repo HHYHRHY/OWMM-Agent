@@ -36,14 +36,6 @@ def get_hssd_single_agent_config(cfg_path, overrides=None):
 
     else:
         config = get_config(cfg_path)
-    # print("config:",config)
-    # with read_write(config):
-    # config.habitat.task.lab_sensors = {}
-    # agent_config = get_agent_config(config.habitat.simulator)
-    # agent_config.sim_sensors = {
-    #     "rgb_sensor": HabitatSimRGBSensorConfig(),
-    #     "depth_sensor": HabitatSimDepthSensorConfig(),
-    # }
     return config
 
 
@@ -85,16 +77,7 @@ def calculate_orientation_xz_plane(position, goal_position):
 def get_orientation(loc):
     final_nav_targ = loc[:3]
     theta = loc[3]
-    # is_z_positive = loc[4]
-    # if is_z_positive == 0:
-    #     dz = 3.0
-    # else:
-    #     dz = -3.0
-    # dx = dz / np.tan(theta)
-    # x_obj = final_nav_targ[0] + dx
-    # z_obj = final_nav_targ[2] + dz
-    # obj_targ_pos = [x_obj,final_nav_targ[1],z_obj]
-    # orientation = calculate_orientation_xz_plane(final_nav_targ,obj_targ_pos)
+    
     return np.array(final_nav_targ), np.array([theta])
 
 
@@ -114,7 +97,6 @@ def set_articulated_agent_base_state(
     if len(base_rot) == 1:
         agent.base_rot = base_rot
     elif len(base_rot) == 4:
-        # convert quaternion to rotation_y_rad with scipy
         r = R.from_quat(base_rot)
         agent.base_rot = r.as_euler("xyz", degrees=False)[1]
     else:
@@ -171,10 +153,6 @@ def generate_scene_graph_from_store_dict(args):
     # print("seed:",args.seed)
     np.random.seed(args.seed)
     config = get_hssd_single_agent_config(args.config)
-    # print("config:",config)
-    # config['habitat']['simulator']['habitat_sim_v0']['gpu_device_id'] = gpu_id
-    # config['habitat']['simulator']['dataset']['data_path'] = dataset_path
-    # print("config:",config)
     env = Env(config=config)
 
     dataset = env._dataset
@@ -282,10 +260,6 @@ def generate_scene_graph_from_store_dict(args):
                         graph_positions.append(point)
                         graph_orientations.append(orientation)
                         graph_annotations.append("random")
-        # print("graph_positions:",graph_positions)
-        # print("graph_orientations:",graph_orientations)
-        # print("graph_annotations:",graph_annotations)
-        # Create a folder for this episode
         episode_dir = output_dir
         if not os.path.exists(episode_dir):
             os.makedirs(episode_dir)
@@ -375,7 +349,7 @@ def generate_scene_graph_for_single_task(args):
             episode_dir, "data", "data_trans.json"
         )
         with open(episode_json_path, "r") as file:
-            episode_json = json.load(file)  # 用data_trans.json
+            episode_json = json.load(file)
         for frame_info in episode_info:
             frame_num = frame_info[0]
             # print("frame_num:",frame_num)
@@ -431,12 +405,12 @@ def generate_episode_image_from_store_dict(args):
             episode_dir, "data", "data_trans.json"
         )
         with open(episode_json_path, "r") as file:
-            episode_json = json.load(file)  # 用data_trans.json
+            episode_json = json.load(file)
         get_obj_json_path = os.path.join(
             episode_dir, f"episode_{episode_id}.json"
         )
         with open(get_obj_json_path, "r") as file:
-            get_obj_json = json.load(file)  # 用data_trans.json
+            get_obj_json = json.load(file)
         hav_get_obj_id = -1
         for item in get_obj_json:
             if item["action"]["name"] == "search_for_goal_rec":
@@ -464,11 +438,6 @@ def generate_episode_image_from_store_dict(args):
                         episode_dir, image_file_name
                     )
                     save_image(image, image_file_path)
-                # print("key:",key)
-            # print(
-            #     "observations['arm_workspace_points']:",
-            #     observations["arm_workspace_points"],
-            # )
             try:
                 metadata.append(
                     {
@@ -642,30 +611,18 @@ def generate_scene_graph(   #use for debug and test scene graph
                         graph_positions.append(point)
                         graph_orientations.append(orientation)
                         graph_annotations.append("random")
-        # print("graph_positions:",graph_positions)
-        # print("graph_orientations:",graph_orientations)
-        # print("graph_annotations:",graph_annotations)
-        # Create a folder for this episode
         episode_dir = os.path.join(output_dir, f"episode_{episode.episode_id}")
         if not os.path.exists(episode_dir):
             os.makedirs(episode_dir)
-        # print("graph_positions:",graph_positions)
-        # print("graph_orientations:",graph_orientations)
         for idx, (position, orientation) in enumerate(
             zip(graph_positions, graph_orientations)
         ):
-            # observations = env.sim.get_observations_at(position=position, rotation=orientation)
             set_articulated_agent_base_state(
                 sim, position, orientation, agent_id=0
             )
             observations = env.step({"action": (), "action_args": {}})
-
-            # Force the episode to be active
             env._episode_over = False
-
             obs_file_list = []
-            # for key in observations.keys():
-            #     print(key)
             for obs_key in obs_keys:
                 if obs_key in observations:
                     image = observations[obs_key]
@@ -677,10 +634,6 @@ def generate_scene_graph(   #use for debug and test scene graph
                     )
                     save_image(image, image_file_path)
                     obs_file_list.append(image_file_name)
-            # for bbox in args.bbox:
-            #     if bbox in observations:
-            #         print(f"{bbox}:{observations[bbox]}")
-
             now_loc = observations["localization_sensor"]
             metadata.append(
                 {
@@ -688,13 +641,11 @@ def generate_scene_graph(   #use for debug and test scene graph
                     "obs_files": obs_file_list,
                     "position": now_loc,
                     "rotation": orientation,
-                    # "detected_objects": observations["objectgoal"],
                 }
             )
 
         env._episode_over = True
 
-    # Save metadata to JSON
     metadata_file_path = os.path.join(output_dir, "metadata.json")
 
     class NumpyEncoder(json.JSONEncoder):
@@ -792,13 +743,7 @@ def parse_args_new():
             ]
         ),
     )
-    # parser.add_argument("--output_dir", type=str, default="data/sparse_slam/rearrange/mp3d")
     args = parser.parse_args()
-
-    # Create output directory if it does not exist
-    # if not os.path.exists(args.output_dir):
-    #     os.makedirs(args.output_dir)
-    # Set seed
     return args
 
 

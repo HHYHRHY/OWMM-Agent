@@ -11,7 +11,7 @@ import psutil,sys
 def check_memory_usage(threshold_mb):
     process = psutil.Process()
     memory_info = process.memory_info()
-    memory_usage_mb = memory_info.rss / (1024 * 1024)  # 转换为MB
+    memory_usage_mb = memory_info.rss / (1024 * 1024)
     for child in process.children(recursive=True):
         memory_usage_mb += child.memory_info().rss / (1024 * 1024)
     print(f"Memory: {memory_usage_mb:.2f} MB")

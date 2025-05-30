@@ -3,7 +3,6 @@ import glob, pdb, re
 import csv,gzip
 import os, shutil,gzip,pdb
 import random
-import process_qa
 from process_qa import QA_process
 import copy
 import argparse
