@@ -64,6 +64,8 @@ if __name__ == '__main__':
     parser.add_argument('--start_dir', type=int, required=True, help='Start')
     parser.add_argument('--end_dir', type=int, required=True, help='End')
     parser.add_argument('--gpu_num', type=int, default=4)
+    process_num = 10
+    max_images = 8
     args = parser.parse_args()
     dataset_path = args.dataset_name
     start_dir = args.start_dir

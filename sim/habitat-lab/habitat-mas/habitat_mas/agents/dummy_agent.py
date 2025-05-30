@@ -44,26 +44,7 @@ class DummyAgentSingle:
                     "name": "wait",
                     "arguments": ['1','agent_0']
                 }]
-    def _init_model():
-        client = OpenAI(api_key='', base_url='http://0.0.0.0:23333/v1')
-        model_name = client.models.list().data[0].id
-        response = client.chat.completions.create(
-            model=model_name,
-            messages=[{
-                'role':
-                'user',
-                'content': [{
-                    'type': 'text',
-                    'text': 'describe this image',
-                }],
-            }],
-            temperature=0.8,
-            top_p=0.8)
     def _2d_to_3d_single_point(self, depth_obs, depth_rot,depth_trans,pixel_x, pixel_y):
-        # depth_camera = self._sim._sensors[depth_name]._sensor_object.render_camera
-
-        # hfov = float(self._sim._sensors[depth_name]._sensor_object.hfov) * np.pi / 180.
-        # W, H = depth_camera.viewport[0], depth_camera.viewport[1]
         W = 512
         H = 512
         hfov = 1.5707963267948966
@@ -147,8 +128,8 @@ If you can not find the target you need to identify,you should find the frame th
 Robot's current view is: Image-9:{image_token_pad}.If you can find the position that you should navigate to, pick or place,you should output your action information.
 Besides,you need to explain why you choose this action in your output and summarize by combining your chosen action with historical information.
 Robot's Task: {task_prompt}{robot_history}Your output format should be in pure JSON format as follow:{json_format_info}."""
-        return question_prompt_align_with_ovmm_no_green_point  #REMEMBER to match the gp setting!!!!!
-    def process_message(self,data_path,robot_image,prompt): #sr:send&receive
+        return question_prompt_align_with_ovmm_no_green_point
+    def process_message(self,data_path,robot_image,prompt):
         content = [
             {
                 "type":"text",
@@ -177,14 +158,12 @@ Robot's Task: {task_prompt}{robot_history}Your output format should be in pure J
             "type": "image_url",
             "image_url": {
                 "url": f"data:image/png;base64,{base64.b64encode(robot_image_buffered.getvalue()).decode('utf-8')}",
-                # "url": f"data:image/png;base64,{base64.b64encode(robot_image_buffered.getvalue()).decode('utf-8')}",
             }
         }
         content.append(robot_image_info)
         return content,rag_image_path_list
     def query_and_receive(self,content,client):
         model_name = client.models.list().data[0].id #this is for internvl
-        # model_name = "internvl_2_5_8B_beam5" #DUMMY!
         response = client.chat.completions.create(
             model=model_name,
             messages=[{
@@ -199,27 +178,15 @@ Robot's Task: {task_prompt}{robot_history}Your output format should be in pure J
         point_3d = self._2d_to_3d_single_point(depth_obs.cpu(), depth_rot.cpu(),depth_trans.cpu(),pixel_x, pixel_y)
         IGNORE_NODE = [-100]
         point_3d_debug = np.concatenate((point_3d, IGNORE_NODE))
-        # print("1:point_3d_debug:",point_3d_debug)
-        # point_3d_debug = point_3d_debug[0]
-        # print("2:point_3d_debug",point_3d_debug)
-        # point_3d_debug = point_3d_debug.tolist()
-        # print("3:point_3d_debug",point_3d_debug)
         return point_3d_debug
     def process_action(self,action,action_information,data_path,observations,rgb_image_path_list,output_path):
         if action == "search_scene_frame":
             data_dir_path = os.path.dirname(data_path)
             metadata_json_path = os.path.join(data_dir_path,'metadata.json')
-            # print("rgb_image_path_list:",rgb_image_path_list)
             basename_list = [os.path.basename(item) 
                              for item in rgb_image_path_list]
             print("basename_list:",basename_list)
             print("action_information_sc:",action_information)
-            # if not self.is_target_sc: #GT search scene graph!!!!!!!!!!!!!!!!!!!
-            #     action_information = basename_list.index("target_rec.png") + 1
-            #     self.is_target_sc = True
-            # else:
-            #     action_information = basename_list.index("goal_rec.png") + 1
-            # print("GT_action_information:",action_information)
             rgb_image_path = rgb_image_path_list[int(action_information)-1]
             rgb_image_name = os.path.basename(rgb_image_path)
             with open(metadata_json_path, 'r') as file:
@@ -237,16 +204,10 @@ Robot's Task: {task_prompt}{robot_history}Your output format should be in pure J
             }
         action_bbox = json.loads(action_information)[0]
         print("action_bbox:",action_bbox)
-        # action_point = [int((action_bbox[0] + (action_bbox[2]/2.0))*512.0/1000.0),
-        #                 int((action_bbox[1] + (action_bbox[3]/2.0))*512.0/1000.0)]  #Because I renew the bounding box format
         action_point = [int(((action_bbox[0] + action_bbox[2])/2.0)*512.0/1000.0),
                         int(((action_bbox[1] + action_bbox[3])/2.0)*512.0/1000.0)]
         print("action_point:",action_point)
         if action == "nav_to_point":
-            # action_bbox = json.loads(action_information)[0]
-            # print("action_bbox:",action_bbox)
-            # action_point = [int((action_bbox[0] + (action_bbox[2]/2.0))*512.0/1000.0),
-            #                 int((action_bbox[1] + (action_bbox[3]/2.0))*512.0/1000.0)]
             target_position = self.process_nav_point(observations['depth_obs'],
                                                   observations['depth_rot'],observations['depth_trans'],action_point),
             print("target_position:",target_position)
@@ -262,9 +223,6 @@ Robot's Task: {task_prompt}{robot_history}Your output format should be in pure J
         if (action == "pick") or (action == "place"):
             robot_armworkspace_image = observations["arm_workspace_rgb"].cpu().numpy()
             save_image(np.squeeze(robot_armworkspace_image.copy()),f"{output_path}/robot_output_{action}.png")
-            # action_bbox = json.loads(action_information)[0]
-            # action_point = [int((action_bbox[0] + (action_bbox[2]/2.0))*512.0/1000.0),
-            #                 int((action_bbox[1] + (action_bbox[3]/2.0))*512.0/1000.0)]
             return {
                 "name": f"{action}_key_point",
                 "arguments": {
@@ -277,7 +235,6 @@ Robot's Task: {task_prompt}{robot_history}Your output format should be in pure J
             "arguments": ['3000',self.agent_name]
         }
     def process_vlm_output(self,data_path,vlm_output,rgb_image_path_list,observations,output_path):
-        # print("vlm_output:",vlm_output)
         vlm_output = json.loads(vlm_output.choices[0].message.content)
         print("vlm_output:",vlm_output)
         vlm_action = vlm_output['action']
@@ -294,19 +251,13 @@ Robot's Task: {task_prompt}{robot_history}Your output format should be in pure J
             self.prepare_action_num -= 1
             return self.prepare_action[2-action_num]
         self.prepare_action_num = 2
-        #this is for action cycle(ensure reset&wait before and action)
-        # robot_image = observations["arm_workspace_rgb"].cpu().numpy()                     ##now is !!!!head_rgb
         robot_image = observations["head_rgb"].cpu().numpy()
-        # save_image(np.squeeze(robot_image.copy()),f"./eval_in_sim_info/{os.path.basename(os.path.dirname(data_path))}/robot_input_{self.rgb_image_store_num}.png")
-        # print("robot_image:",robot_image.shape)
         self.rgb_image_store_num+=1
         task_prompt = self.get_episode_prompt(data_path)
         prompt = self.process_prompt(task_prompt,history = self.robot_history)
         content, rgb_image_path_list = self.process_message(data_path,robot_image,prompt)
-        # print("query_content:",content)
-        USE_SERVER = False
-        if USE_SERVER:
-            # random_num = random.randint(0, 3)
+        USE_MULTI_SERVER = False
+        if USE_MULTI_SERVER:
             if self.random_num == 0:
                 self.random_num = random.randint(0, 10000000)
             else:

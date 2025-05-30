@@ -14,7 +14,6 @@ from multiprocessing import Pool, cpu_count
 import ast
 import pdb
 import time
-client = OpenAI(api_key='123', base_url='http://0.0.0.0:33336/v1') #change the url to match your deployment
 
 def process_message(image_list,prompt):
     prompt = prompt.replace('<image>','<IMAGE_TOKEN>')
@@ -67,6 +66,7 @@ def process_item(item):
 
 if __name__ == '__main__':
     num_processes = 4
+    client = OpenAI(api_key='123', base_url='http://0.0.0.0:33336/v1') #change the url to match your deployment
     answer_jsonl_path = 'add10_real_test_internvl38B.jsonl' #Inferenced json's path
     test_jsonl_paths = ['OWMM_real_test/real_test.jsonl'] #Test set Path
     text_tuple = []
