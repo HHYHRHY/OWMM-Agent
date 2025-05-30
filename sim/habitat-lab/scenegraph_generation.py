@@ -20,17 +20,14 @@ def clear_directory(path):
             print(f'Failed to delete {file_path}. Reason: {e}')
 
 def run_scene_graph_generate(args):
-    # process_name = multiprocessing.current_process().name
     data_path,gpu_id = args
     item = str(os.path.basename(os.path.normpath(data_path)))
     dataset_path = os.path.join(data_path, 'scene_graph.gz')
-    # print("dataset_path",dataset_path)
     output_path = data_path
-    # os.environ['CUDA_VISIBLE_DEVICES'] = str(gpu_id)
     seed = random.randint(1, 100000000)
     min_point_dis = 2.0
-    zxz_yaml_path = './habitat-lab/habitat/config/benchmark/single_agent/config_fetch.yaml'
-    with open(zxz_yaml_path,'r') as file:
+    fetch_yaml_path = './habitat-lab/habitat/config/benchmark/single_agent/config_fetch.yaml'
+    with open(fetch_yaml_path,'r') as file:
         data = yaml.load(file)
     data['habitat']['dataset']['data_path'] = dataset_path
     data['habitat']['simulator']['habitat_sim_v0']['gpu_device_id'] = gpu_id
@@ -62,7 +59,6 @@ def run_scene_graph_generate(args):
     time.sleep(0.5)
 
 if __name__ == '__main__':
-    # dataset_path = "./sat_DATASET_GOOGLE_0109_head_rgb"
     parser = argparse.ArgumentParser(description="Setup dataset and log paths.")
     parser.add_argument('--dataset_name', type=str, required=True, default="sat_DATASET_GOOGLE_0109_head_rgb")
     parser.add_argument('--start_dir', type=int, required=True, help='Start')
@@ -75,11 +71,9 @@ if __name__ == '__main__':
     image_dataset_path = os.path.join(dataset_path, "image")
     yaml_dir_name = f"startfrom_{start_dir}endat_{end_dir}"
     log_path = f'./log/scene_graph_pipeline/{yaml_dir_name}'
-    # clear_directory(log_path)
     os.makedirs(log_path, exist_ok=True)
     file_dir_path_start = [os.path.join(image_dataset_path,name) for name in os.listdir(image_dataset_path)]
     file_dir_path_start = sorted(file_dir_path_start)
-    # print("file_dir_path_start",file_dir_path_start)
     file_dir_path = file_dir_path_start[start_dir:end_dir]
     process_num = 50
     gpu_num = args.gpu_num

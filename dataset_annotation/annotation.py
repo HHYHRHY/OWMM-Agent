@@ -87,7 +87,7 @@ def parse_args():
     parser.add_argument('--dataset_name', type=str, default='TEST_GOOGLE_30scene',
                         help='Dataset name')
     parser.add_argument('--gz_dir_name', type=str, default='hssd_scene_google_test',
-                        help='scene config directory name')
+                        help='scene config directory name,remember to match your Dataset')
     parser.add_argument('--desired_robot_image_name', type=str, default='head_rgb',
                         choices=['arm_workspace_rgb', 'head_rgb'],
                         help='Type of robot image to use')
