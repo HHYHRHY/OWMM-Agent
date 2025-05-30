@@ -25,27 +25,8 @@ from habitat_baselines.utils.common import (
     is_continuous_action_space,
 )
 from habitat_baselines.utils.info_dict import extract_scalars_from_info
-from habitat_mas.agents.vlm_agent import VLMAgent,VLMAgentSingle
 from collections import OrderedDict
 import json
-# class Context:
-#     _instance = None
-
-#     def __new__(cls, *args, **kwargs):
-#         if not cls._instance:
-#             cls._instance = super(Context, cls).__new__(cls, *args, **kwargs)
-#             cls._instance.data = {}
-#         return cls._instance
-
-#     def update(self, data):
-#         self.data = data
-
-#     def get_data(self):
-#         return self.data
-# def get_context():
-#     return Context()
-# com = get_context()
-# print("com_id",id(com))
 import multiprocessing
 def produce_data(queue,data):
     queue.put(data)
@@ -71,23 +52,6 @@ class HabitatMASEvaluator(Evaluator):
         temp = 0
         observations = envs.reset()
         observations = envs.post_step(observations)
-        # queue = multiprocessing.Queue()
-        # producer_process = multiprocessing.Process(target=produce_Data,args=(queue,))
-        # producer_process.start()
-        # # collect numerical observations and non-numerical observations
-        # numerical_observations = {
-        #     key: value
-        #     for key, value in observations[0].items()
-        #     if isinstance(value, np.ndarray)
-        # }
-        # non_numerical_observations = {
-        #     key: value
-        #     for key, value in observations.items()
-        #     if not isinstance(value, np.ndarray)
-        # }
-
-        # batch = batch_obs(numerical_observations, device=device)
-        # print("observations:",observations)
         name_to_remove = {'agent_0_obj_list_info','agent_1_obj_list_info'}
         obj_info_item_disk = []
         name_to_remove = {'agent_0_obj_list_info','agent_1_obj_list_info'}
@@ -193,10 +157,6 @@ class HabitatMASEvaluator(Evaluator):
         envs_text_context = {}
         pbar = tqdm.tqdm(total=number_of_eval_episodes * evals_per_ep)
         agent.eval()
-        if config.habitat_baselines.eval.vlm_eval or config.habitat_baselines.eval.vlm_compare:
-            vlm_agent = VLMAgentSingle(agent_num = 2,image_dir = './video_dir/image',
-                                 json_dir = './video_dir/image_dir/episode_91/episode_91.json',
-                                 url = "http://0.0.0.0:10077/robot-chat")
 
         cur_ep_id = -1
         dataset_info = config.habitat.dataset.data_path
@@ -260,15 +220,10 @@ class HabitatMASEvaluator(Evaluator):
                     agent_0_image = batch["agent_0_head_rgb"].cpu()
                     agent_1_image = batch["agent_1_head_rgb"].cpu()
                     agent_0_depth_info = batch["agent_0_depth_inf"].cpu()
-                    # print("depthinfoshape:",agent_0_depth_info.shape)
-                    # agent_0_trans = batch["agent_0_robot_trans_martix"].cpu()
-                    # agent_1_trans = batch["agent_1_robot_trans_martix"].cpu()
-                    # image = [agent_0_image,agent_1_image]
                     agent_0_depth_rot = batch["agent_0_depth_rot"].cpu()
                     agent_0_depth_trans = batch["agent_0_depth_trans"].cpu()
                     image = [agent_0_image]
                     agent_trans = []
-                    # print("image_shape:",image[0].shape,flush = True)
                     filter_action = vlm_agent.answer_vlm(agent_trans_list = agent_trans,
                                                          agent_query = agent_query,image = image,
                                                          episode_id = int(current_episodes_info[0].episode_id),depth_info=agent_0_depth_info,depth_rot = agent_0_depth_rot,depth_trans = agent_0_depth_trans)
@@ -299,26 +254,14 @@ class HabitatMASEvaluator(Evaluator):
                                 data[key] = filter_action[key]
                         with open(stored_path,'w') as f:
                             json.dump(data,f)
-            # print("current_episodes_info",current_episodes_info)
-            # agent_0_image = batch["agent_0_head_rgb"].cpu()
-            # agent_0_depth_info = batch["agent_0_depth_inf"].cpu()
-            # agent_0_depth_rot = batch["agent_0_depth_rot"].cpu()
-            # agent_0_depth_trans = batch["agent_0_depth_trans"].cpu()
-            # print("agent_0_depth_info.shape:",agent_0_depth_info.shape)
-            # print("agent_0_depth_rot.shape:",agent_0_depth_rot)
-            # print("agent_0_depth_trans.shape:",agent_0_depth_trans)
-
             with inference_mode():
                 ep_info = [int(cur_ep_id),dataset_info]
-                # print("ep_info:",ep_info)
-                # agent_0_loc = batch["agent_0_localization_sensor"].cpu()
                 action_data = agent.actor_critic.act(
                     batch,
                     test_recurrent_hidden_states,
                     prev_actions,
                     not_done_masks,
                     ep_info,
-                    # deterministic=False,
                     envs_text_context=envs_text_context,
                     output = filter_action,
                     **space_lengths,
@@ -327,9 +270,6 @@ class HabitatMASEvaluator(Evaluator):
                     agent_0_image = batch["agent_0_head_rgb"].cpu()
                     agent_1_image = batch["agent_1_head_rgb"].cpu()
                     agent_0_depth_info = batch["agent_0_depth_inf"].cpu()
-                    # agent_0_trans = batch["agent_0_robot_trans_martix"].cpu()
-                    # agent_1_trans = batch["agent_1_robot_trans_martix"].cpu()
-                    # image = [agent_0_image,agent_1_image]
                     print("image_shape",agent_0_image.shape,flush=True)
                     image = [agent_0_image]
 
