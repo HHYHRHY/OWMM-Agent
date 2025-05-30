@@ -1,0 +1,10 @@
+defaults:
+  - /habitat/task/actions/oracle_nav_action@_here_
+  - _self_
+
+
+# type: OracleNavCoordinateAction # to control both position and look at position
+type: PixelNavAction # to control only position
+motion_control: base_velocity
+lin_speed: 10.0
+ang_speed: 10.0

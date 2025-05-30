@@ -1,0 +1,28 @@
+defaults:
+  - oracle_nav_action@_here_
+  - _self_
+
+type: OracleNavDiffBaseAction
+motion_control: base_velocity
+lin_speed: 10.0
+ang_speed: 10.0
+spawn_max_dist_to_obj: -1.0
+# For noncylinder navmesh action
+# If we allow the agent to do sliding
+allow_dyn_slide: True
+# navmesh_offset: [[0.0, 0.0], [0.25, 0.0], [-0.25, 0.0]]
+navmesh_offset: []
+# If we allow the robot to move laterally
+enable_lateral_move: False
+# There is a collision if the difference between the clamped NavMesh position and target position
+# is more than collision_threshold for any point.
+collision_threshold: 0.1
+dist_thresh: 0.3
+turn_thresh: 0.2
+
+# For re-computing navmesh for different bases 
+base_type: "flying"
+agent_height: 1.0
+agent_radius: 0.2
+agent_max_climb: 1.0
+agent_max_slope: 90.0

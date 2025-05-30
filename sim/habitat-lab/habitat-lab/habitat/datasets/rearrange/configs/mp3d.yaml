@@ -1,0 +1,135 @@
+
+---
+dataset_path: "/data/scene_datasets/mp3d/mp3d.scene_dataset_config.json" # mp3d
+additional_object_paths:
+  - "data/objects/ycb/configs/"
+  - "data/replica_cad/configs/objects"
+
+object_sets:
+  -
+    name: "kitchen"
+    included_substrings:
+    - "003_cracker_box"
+    # - "013_apple"
+    # - "005_tomato_soup_can"
+    # - "072-b_toy_airplane"
+    # - "053_mini_soccer_ball"
+    # - "030_fork"
+    # - "061_foam_brick"
+    # - "019_pitcher_base"
+    # - "065-c_cups"
+    # - "065-e_cups"
+    # - "021_bleach_cleanser"
+    # - "004_sugar_box"
+    # - "065-b_cups"
+    # - "028_skillet_lid"
+    # - "008_pudding_box"
+    # - "011_banana"
+    # - "033_spatula"
+    # - "073-a_lego_duplo"
+    # - "072-a_toy_airplane"
+    # - "063-b_marbles"
+    # - "026_sponge"
+    # - "014_lemon"
+    # - "065-a_cups"
+    # - "065-f_cups"
+    # - "054_softball"
+    # - "027_skillet"
+    # - "065-j_cups"
+    # - "073-b_lego_duplo"
+    # - "016_pear"
+    # - "073-c_lego_duplo"
+    # - "051_large_clamp"
+    # - "058_golf_ball"
+    # - "002_master_chef_can"
+    # - "036_wood_block"
+    # - "055_baseball"
+    # - "057_racquetball"
+    # - "037_scissors"
+    # - "072-e_toy_airplane"
+    # - "017_orange"
+    # - "070-b_colored_wood_blocks"
+    # - "042_adjustable_wrench"
+    # - "065-h_cups"
+    # - "073-d_lego_duplo"
+    # - "029_plate"
+    # - "072-c_toy_airplane"
+    # - "071_nine_hole_peg_test"
+    # - "007_tuna_fish_can"
+    # - "065-g_cups"
+    # - "065-d_cups"
+    # - "077_rubiks_cube"
+    # - "063-a_marbles"
+    # - "043_phillips_screwdriver"
+    # - "025_mug"
+    # - "070-a_colored_wood_blocks"
+    # - "052_extra_large_clamp"
+    # - "056_tennis_ball"
+    # - "065-i_cups"
+    # - "072-d_toy_airplane"
+    # - "050_medium_clamp"
+    # - "038_padlock"
+    # - "012_strawberry"
+    # - "032_knife"
+    # - "040_large_marker"
+    # - "059_chain"
+    # - "031_spoon"
+    # - "022_windex_bottle"
+    # - "073-e_lego_duplo"
+    # - "073-f_lego_duplo"
+    # - "024_bowl"
+    # - "018_plum"
+    # - "010_potted_meat_can"
+    # - "048_hammer"
+    # - "062_dice"
+    # - "015_peach"
+    # - "073-g_lego_duplo"
+    # - "035_power_drill"
+    # - "044_flat_screwdriver"
+    # - "009_gelatin_box"
+    # - "006_mustard_bottle"
+
+    excluded_substrings: []
+    comment: "Leave included_substrings empty to select all objects."
+
+receptacle_sets:
+  -
+    name: "table"
+    included_object_substrings: []
+      # - "frl_apartment_table_01"
+      # - "frl_apartment_basket"
+      # - "frl_apartment_tvstand"
+      # - "frl_apartment_cabinet"
+      # - "frl_apartment_wall_cabinet_02"
+      # - "frl_apartment_chair_01"
+      # - "frl_apartment_table_03"
+      # - "frl_apartment_table_02"
+      # - "frl_apartment_wall_cabinet_01"
+    excluded_object_substrings: []
+    included_receptacle_substrings:
+      - ""
+    excluded_receptacle_substrings: []
+    comment: "The empty substrings act like wildcards, selecting all receptacles for all objects."
+
+object_samplers:
+  -
+    name: "kitchen_counter"
+    type: "uniform"
+    params:
+      object_sets: ["kitchen"]
+      receptacle_sets: ["table"]
+      num_samples: [1, 1]
+      orientation_sampling: "up"
+
+object_target_samplers:
+  -
+    name: "any_targets"
+    type: "uniform"
+    params:
+      object_samplers: ["kitchen_counter"]
+      receptacle_sets: ["table"]
+      num_samples: [1, 1]
+      orientation_sampling: "up"
+
+
+

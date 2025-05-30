@@ -1,0 +1,126 @@
+# @package _global_
+
+defaults:
+  - /habitat: habitat_config_base
+  - /habitat/task: task_config_base
+
+  - /habitat/simulator/agents/habitat_mas_agents@habitat.simulator.agents.agent_0: SpotRobot_head_only
+  - /habitat/simulator/agents/habitat_mas_agents@habitat.simulator.agents.agent_1: FetchRobot_default
+
+  - /habitat/dataset/objectnav: dataset_mobility
+
+
+  - /habitat/task/actions@habitat.task.actions.agent_0_base_velocity: base_velocity_non_cylinder
+  - /habitat/task/actions@habitat.task.actions.agent_1_base_velocity: base_velocity
+  - /habitat/task/actions@habitat.task.actions.agent_0_oracle_nav_action: oracle_nav_action
+  - /habitat/task/actions@habitat.task.actions.agent_1_oracle_nav_action: oracle_nav_action
+  - /habitat/task/lab_sensors@habitat.task.lab_sensors.agent_0_agents_within_threshold: agents_within_threshold
+  # - /habitat/task/lab_sensors@habitat.task.lab_sensors.agent_0_objectgoal: objectgoal_sensor
+  - /habitat/task/lab_sensors@habitat.task.lab_sensors.agent_1_agents_within_threshold: agents_within_threshold
+  # - /habitat/task/lab_sensors@habitat.task.lab_sensors.agent_1_objectgoal: objectgoal_sensor
+
+  - /habitat/task/measurements:
+    - articulated_agent_force
+    - articulated_agent_colls
+    - did_agents_collide
+    - num_agents_collide
+    # - distance_to_goal
+    # - distance_to_goal_reward
+    # - success
+    # - spl
+    - multi_agent_distance_to_goal
+    - multi_agent_distance_to_goal_reward
+    - multi_agent_success
+    - multi_agent_spl
+  
+  - _self_
+
+habitat:
+  task:
+    type: ObjectNav-v2
+    success_reward: 2.5
+    min_distance_start_agents: 50.0
+    slack_reward: -1e-3
+    end_on_success: True
+    reward_measure: "multi_agent_distance_to_goal_reward"
+    # reward_measure: "distance_to_goal_reward"
+    success_measure: "multi_agent_spl"
+    # success_measure: "spl"
+    goal_sensor_uuid: objectgoal
+    measurements:
+      multi_agent_distance_to_goal:
+      # distance_to_goal:
+        # distance_to: POINT
+        distance_to: VIEW_POINTS
+      multi_agent_success:
+      # success:
+        success_distance: 0.1
+    lab_sensors:
+      agent_0_agents_within_threshold:
+        x_len: 2.0
+        y_len: 1.5
+        agent_idx: 0
+      agent_1_agents_within_threshold:
+        x_len: 2.0
+        y_len: 1.5
+        agent_idx: 1
+
+    actions:
+      agent_0_base_velocity:
+        lin_speed: 40.0
+        navmesh_offset: [[0.0, 0.0], [0.225, 0.0]]
+        allow_dyn_slide: True
+        enable_lateral_move: False
+        collision_threshold: 1e-5
+        # speed parameters
+        longitudinal_lin_speed: 5.0
+        lateral_lin_speed: 5.0
+        ang_speed: 5.0
+        enable_rotation_check_for_dyn_slide: False
+
+      agent_1_base_velocity:
+        lin_speed: 20.0
+        allow_dyn_slide: True
+        # speed parameters
+        ang_speed: 5.0
+    robot_at_thresh: 3.0
+
+
+  environment:
+    max_episode_steps: 750
+
+    
+  simulator:
+    type: Sim-v1
+    seed: 100
+    scene_dataset: "data/scene_datasets/mp3d/mp3d.scene_dataset_config.json"
+    additional_object_paths:
+      - "data/objects/ycb/configs/"
+    concur_render: True
+    auto_sleep: True
+    agents_order:
+      - agent_0
+      - agent_1
+
+    kinematic_mode: True
+    ac_freq_ratio: 1
+    step_physics: False
+
+    habitat_sim_v0:
+      gpu_device_id: 0
+      allow_sliding: False
+      enable_physics: True
+
+    agents:
+      agent_0:
+        joint_start_noise: 0.0
+      agent_1:
+        joint_start_noise: 0.0
+        
+  dataset:
+    data_path: data/datasets/objectnav/mp3d/v1/{split}/{split}.json.gz
+  #   data_path: data/datasets/perception/perception_eval.json.gz
+  #   randomize_agent_start: 1
+    robot_config: data/robots/json/perception.json
+  #   mode: perception
+

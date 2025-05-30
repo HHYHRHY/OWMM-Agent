@@ -1,0 +1,20 @@
+# @package habitat_baselines.rl.policy.hierarchical_policy.defined_skills
+# See `oracle_skills.yaml` for details.
+
+wait:
+  skill_name: "WaitSkillPolicy"
+  action_name: "wait"
+  obs_skill_inputs: []
+  max_skill_steps: -1
+  ignore_grip: True
+
+nav_to_obj:
+  skill_name: "OracleNavPolicy"
+  # action_name: "base_velocity_non_cylinder"
+  action_name: "base_velocity"
+  obs_skill_inputs: ["obj_start_sensor", "abs_obj_start_sensor", "obj_goal_sensor", "abs_obj_goal_sensor"]
+  max_skill_steps: 1000
+  apply_postconds: False
+  obs_skill_input_dim: 2
+  pddl_action_names: ["nav_to_obj", "nav_to_goal", "nav_to_receptacle_by_name"]
+  ignore_grip: True

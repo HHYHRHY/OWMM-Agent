@@ -1,0 +1,51 @@
+# @package habitat_baselines.rl.policy.hierarchical_policy.defined_skills
+# See `oracle_skills.yaml` for details.
+
+pick_key_point:
+  skill_name: "OraclePixelPickPolicy"
+  action_name: "arm_pick_action"
+  obs_skill_inputs: ["is_holding"]
+  max_skill_steps: 500
+  apply_postconds: False
+  force_end_on_timeout: False
+
+place_key_point:
+  skill_name: "OraclePixelPlacePolicy"
+  action_name: "arm_place_action"
+  obs_skill_inputs: []
+  max_skill_steps: 500
+  apply_postconds: False
+  force_end_on_timeout: False
+
+nav_to_key_point:
+  skill_name: "OraclePixelNavPolicy"
+  obs_skill_inputs: [head_depth, camera_info]
+  max_skill_steps: 1000
+  apply_postconds: False
+  force_end_on_timeout: False
+  obs_skill_input_dim: 2
+  # We don't want to use this skill in the PDDL domain.
+  # pddl_action_names: ["nav_to_pixel"]
+
+nav_to_position:
+  skill_name: "OracleNavCoordPolicy"
+  obs_skill_inputs: []
+  max_skill_steps: 1000
+  apply_postconds: False
+  force_end_on_timeout: False
+  obs_skill_input_dim: 3
+  # We don't want to use this skill in the PDDL domain.
+  # pddl_action_names: ["nav_to_position"]
+
+wait:
+  skill_name: "WaitSkillPolicy"
+  action_name: "wait"
+  obs_skill_inputs: []
+  max_skill_steps: -1
+
+reset_arm:
+  skill_name: "ResetArmSkill"
+  action_name: "arm_reset_action"
+  obs_skill_inputs: []
+  max_skill_steps: 200
+  force_end_on_timeout: False

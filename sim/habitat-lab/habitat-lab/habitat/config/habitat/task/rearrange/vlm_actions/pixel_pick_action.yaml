@@ -1,0 +1,11 @@
+# @package habitat.task.actions
+defaults:
+  - /habitat/task/actions/arm_action@_here_
+  - _self_
+
+
+type: ArmPickAction
+arm_controller: PixelArmAction
+grip_controller: MagicGraspAction
+grasp_thresh_dist: 0.8
+render_ee_target: True

@@ -1,0 +1,10 @@
+# @package habitat.simulator.agents.fetch_suction
+defaults:
+  - /habitat/simulator/agents/agent_base@_here_
+  - _self_
+  - /habitat/simulator/sim_sensors@sim_sensors.head_rgb_sensor: head_rgb_sensor
+  - /habitat/simulator/sim_sensors@sim_sensors.head_depth_sensor: head_depth_sensor
+
+height: 0.7
+articulated_agent_type: DJIDrone
+articulated_agent_urdf: data/robots/dji_drone/urdf/dji_m100_sensors_scaled.urdf

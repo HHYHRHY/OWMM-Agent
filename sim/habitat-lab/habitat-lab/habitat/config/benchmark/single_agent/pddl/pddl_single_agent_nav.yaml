@@ -1,0 +1,19 @@
+objects:
+  - name: any_targets|0
+    expr_type: movable_entity_type
+  - name: agent_0
+    expr_type: robot_entity_type
+
+goal:
+  expr_type: AND
+  sub_exprs:
+    - robot_at(any_targets|0, agent_0)
+
+stage_goals:
+  stage_1:
+    expr_type: AND
+    sub_exprs:
+      - robot_at(any_targets|0, agent_0)
+
+solution:
+  - nav_to_goal(any_targets|0, agent_0)
