@@ -23,7 +23,7 @@ We provide a script for parallel data collection on multiple GPUs. To run the sc
 python dataset_make.py --gz_start 0 --gz_end 10 --base_directory DATASET_demo --process_num 4 --gpu_number 1 --scene_dataset_dir hssd_scene_ycb_trainset
 ```
 
-This means the script will perform data collection using a single GPU with four processes. The episode config used is `hssd_scene_ycb_trainset`, and for each scene, it will collect `.gz` files numbered from 0 to 10. The collected dataset will be stored in the `DATASET_demo` folder.This folder contains raw robot dataset collected from the simulator. The raw dataset need to be annotated in the [dataset_annotation](dataset_annotation). Please follow [Readme]((dataset_annotation/README.md)) in the annotation part to complete the labeling process.
+This means the script will perform data collection using a single GPU with four processes. The episode config used is `hssd_scene_ycb_trainset`, and for each scene, it will collect `.gz` files numbered from 0 to 10. The collected dataset will be stored in the `DATASET_demo` folder.This folder contains raw robot dataset collected from the simulator. The raw dataset need to be annotated in the [dataset_annotation](dataset_annotation). Please follow [Readme](dataset_annotation/README.md) in the annotation part to complete the labeling process.
 
 After the raw dataset has been annotated, the dataset also needs to include scene graph images randomly sampled from the simulator. Please follow the command example below to collect this data:
 
@@ -38,5 +38,5 @@ This means the script will read episodes numbered from 0 to 100 from the annotat
 
 To eval our models and baseline models(PIVOT agent and Robopoint agent), you should first follow the upon instructions to make test dataset. Then you can follow the scripts`episodic_eval_gptagent.py` and `episodic_eval_owmmvlm.py` to make episodic evaluation.
 
-You should navigate to [dummy_agent.py](sim/habitat-lab/habitat-mas/habitat_mas/agents/dummy_agent.py) to change the client's url to match your model's deployment. Before evaluate baseline models, you should first navigate to [pivot_agent.py](sim/habitat-lab/habitat-mas/habitat_mas/agents/pivot_agent.py) to change API_KEY and BASE_URL for gpt-4o in line 334. Change `USE_PIVOT` in line 343 to match your baseline model. If you want to evaluate Robopoint agent, you should additionally change the url to match your deployment of robopoint model in line 294.
+You should navigate to [dummy_agent.py](habitat-lab/habitat-mas/habitat_mas/agents/dummy_agent.py) to change the client's url to match your model's deployment. Before evaluate baseline models, you should first navigate to [pivot_agent.py](habitat-lab/habitat-mas/habitat_mas/agents/pivot_agent.py) to change API_KEY and BASE_URL for gpt-4o in line 334. Change `USE_PIVOT` in line 343 to match your baseline model. If you want to evaluate Robopoint agent, you should additionally change the url to match your deployment of robopoint model in line 294.
 
