@@ -47,3 +47,5 @@ For dataset generation and simulator evaluation, Please follow the instructions 
 
 This repo is built upon [EMOS](https://github.com/SgtVincent/EMOS), which built based on the [Habitat Project](https://aihabitat.org/) and [Habitat Lab](https://github.com/facebookresearch/habitat-lab) by Meta. 
 We would like to thank the authors of EMOS and the original Habitat project for their contributions to the community.
+
+Special thanks: The real-world deployment and experiment is based on [Robi Butler](https://robibutler.github.io/), which provides a multi-modal communication interfaces for perception and actions between the human/agent and the real robot in the environment. 
