@@ -2,6 +2,9 @@
 
 This repo maintains an overview of the OWMM-Agent project, as introduced in paper "OWMM-Agent: Open World Mobile Manipulation With Multi-modal Agentic Data Synthesis".
 
+<!-- insert banner video here -->
+![OWMM-Agent Banner](docs/demo_banner.gif)
+
 ## Table of Contents
 
 - [Introduction](#introduction)
@@ -12,6 +15,7 @@ This repo maintains an overview of the OWMM-Agent project, as introduced in pape
 - [Credit](#credit)
 
 ## Introduction
+
 
 The rapid progress of navigation, manipulation, and vision models has made mobile manipulators capable in many specialized tasks. 
 However, the open-world mobile manipulation (OWMM) task remains a challenge due to the need for generalization to open-ended instructions and environments, as well as the systematic complexity to integrate high-level decision making with low-level robot control based on both global scene understanding and current agent state.
