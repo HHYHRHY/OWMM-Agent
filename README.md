@@ -37,7 +37,7 @@ git clone https://github.com/owmm-vlm-project/OWMM-Agent.git
 
 Please follow the instructions in the [Install Habitat Environment](./install_habitat.md) to install the Habitat environment. Please refer to the Meta official repository [habitat-lab](https://github.com/facebookresearch/habitat-lab) for troubleshooting and more information. 
 
-For extra dependencies in Habitat and original datasets used in OWMM-VLM, please follow the instructions in [Habitat-MAS Package](./sim/habitat-lab/habitat-mas/README.md). 
+For extra dependencies in Habitat and original datasets used in OWMM-VLM, please follow the installation instructions and usage of dataset download in [Habitat-MAS Package](./sim/habitat-lab/habitat-mas/README.md). We have not utilized the MP3D dataset at present, so there is no need to download it.
 
 ### Install VLM dependencies
 
