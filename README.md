@@ -1,7 +1,7 @@
 # OWMM-Agent
 
 This repo maintains an overview of the OWMM-Agent project, as introduced in paper "OWMM-Agent: Open World Mobile Manipulation With Multi-modal Agentic Data Synthesis".
-### 📖[Paper]()｜🗂️[Dataset](https://huggingface.co/datasets/hhyrhy/OWMM-Agent-data)｜🤗[Models](https://huggingface.co/hhyrhy/OWMM-Agent-Model)
+### 📖[Paper](https://arxiv.org/abs/2506.04217)｜🗂️[Dataset](https://huggingface.co/datasets/hhyrhy/OWMM-Agent-data)｜🤗[Models](https://huggingface.co/hhyrhy/OWMM-Agent-Model)
 
 <!-- insert banner video here -->
 ![OWMM-Agent Banner](docs/demo_banner.gif)
