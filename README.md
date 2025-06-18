@@ -31,7 +31,7 @@ In this repository, we provide the complete pipeline code for data collection an
 You should first clone our repo:
 
 ```bash
-git clone https://github.com/owmm-vlm-project/OWMM-Agent.git
+git clone https://github.com/HHYHRHY/OWMM-Agent.git
 ```
 
 ### Install Habitat environment and datasets
