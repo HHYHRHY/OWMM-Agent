@@ -297,9 +297,9 @@ def get_text_sensors(sim, *args, **kwargs):
 
         return {
             "scene_description": scene_description_sensor,
-            "robot_resume": RobotResumeSensor(
-                sim, lab_sensors_config["robot_resume"], *args, **kwargs
-            )
+            # "robot_resume": RobotResumeSensor(
+            #     sim, lab_sensors_config["robot_resume"], *args, **kwargs
+            # )
         }
 
 def get_text_context(sim, robot_configs: List[Dict], *args, **kwargs):

@@ -147,7 +147,7 @@ def parse_arguments():
     parser.add_argument('--repeat_time', type=int, default=1, help='Repeat time')
     parser.add_argument('--scene_dataset_dir', type=str, default='hssd_scene_allycb_train_2', help='Scene dataset directory')
     parser.add_argument('--sample_scene', type=str, nargs='+', default=["106878960_174887073","108736851_177263586","108736824_177263559","107734254_176000121"], help='Sample scenes')
-    parser.add_argument('--timeout', type=int, default=800, help='Sampling timeout setting')
+    parser.add_argument('--timeout', type=int, default=800, help='Sampling timeout setting') #change timeout to match your device
     parser.add_argument('--restart_scene', type=str, default="")
     parser.add_argument('--start_scene',type=int,default=None)
     parser.add_argument('--end_scene',type=int,default=None)
