@@ -13,9 +13,9 @@ def extract_info_from_jsonl(jsonl_file):
             
             conversations = data.get("conversations", [])
             task_description = ""
-            for convo in conversations:
-                if convo.get("from") == "human":
-                    value = convo.get("value", "")
+            for conversation in conversations:
+                if conversation.get("from") == "human":
+                    value = conversation.get("value", "")
                     start = value.find("Robot's Task:") + len("Robot's Task:")
                     end = value.find("Robot's history:") if "Robot's history:" in value else value.find("Your output format")
                     task_description = value[start:end].strip()
