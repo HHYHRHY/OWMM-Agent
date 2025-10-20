@@ -1,4 +1,5 @@
 # OWMM-Agent
+_Accepted at NeurIPS 2025_
 
 This repo maintains an overview of the OWMM-Agent project, as introduced in paper "OWMM-Agent: Open World Mobile Manipulation With Multi-modal Agentic Data Synthesis".
 ### 📖[Paper](https://arxiv.org/abs/2506.04217)｜🗂️[Dataset](https://huggingface.co/datasets/hhyrhy/OWMM-Agent-data)｜🤗[Models](https://huggingface.co/hhyrhy/OWMM-Agent-Model)
