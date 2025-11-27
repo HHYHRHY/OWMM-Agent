@@ -22,7 +22,7 @@
 1. **pip install habitat-lab stable version**.
 
       ```bash
-      cd habitat-mas
+      cd sim/habitat-lab
       pip install -e habitat-lab  # install habitat_lab
       # NOTE: You need to install our modified habitat-lab package rather than the original repo.
       # git clone --branch stable https://github.com/facebookresearch/habitat-lab.git
