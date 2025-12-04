@@ -49,6 +49,18 @@ For the dependencies required for model fine-tuning and deployment, please refer
 
 For dataset generation and simulator evaluation, Please follow the instructions in [sim](./sim/README.md). After sampling dataset from dataset generation, please refer to the instructions in [dataset_annotation](./dataset_annotation/README.md) to obtain annotated datasets. For step evaluation, please follow the instructions in [step_evaluation](./step_evaluation/README.md).
 
+## Citation
+
+If you find our work helpful, please cite us:
+```bibtex
+@article{chen2025owmm,
+  title={OWMM-Agent: Open World Mobile Manipulation With Multi-modal Agentic Data Synthesis},
+  author={Chen, Junting and Liang, Haotian and Du, Lingxiao and Wang, Weiyun and Hu, Mengkang and Mu, Yao and Wang, Wenhai and Dai, Jifeng and Luo, Ping and Shao, Wenqi and others},
+  journal={arXiv preprint arXiv:2506.04217},
+  year={2025}
+}
+```
+
 ## Credit
 
 This repo is built upon [EMOS](https://github.com/SgtVincent/EMOS), which built based on the [Habitat Project](https://aihabitat.org/) and [Habitat Lab](https://github.com/facebookresearch/habitat-lab) by Meta. 
